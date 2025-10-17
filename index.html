@@ -3,681 +3,293 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Izanami Dinner Menu Selection</title>
+    <title>Izanami Dinner Order Form</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #3d4d3a 0%, #5a6b50 100%);
-            color: #333;
-            padding: 20px;
-            min-height: 100vh;
-        }
-        
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-            overflow: hidden;
-        }
-        
-        .header {
-            background: linear-gradient(135deg, #6b8e5f 0%, #8db380 100%);
-            color: white;
-            padding: 40px 30px;
-            text-align: center;
-        }
-        
-        .header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            font-weight: 300;
-            letter-spacing: 2px;
-        }
-        
-        .header p {
-            font-size: 1.1em;
-            opacity: 0.95;
-        }
-        
-        .selection-counter {
-            background: rgba(255,255,255,0.2);
-            padding: 15px;
-            margin-top: 20px;
-            border-radius: 8px;
-            font-size: 1.2em;
-            font-weight: bold;
-        }
-        
-        .form-content {
-            padding: 40px 30px;
-        }
-        
-        .form-group {
-            margin-bottom: 25px;
-        }
-        
-        .form-group label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #333;
-            font-size: 1.05em;
-        }
-        
-        .form-group input[type="text"],
-        .form-group input[type="email"],
-        .form-group textarea {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 6px;
-            font-size: 1em;
-            transition: border-color 0.3s;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        .form-group textarea {
-            min-height: 80px;
-            resize: vertical;
-        }
-        
-        .form-group input:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #8db380;
-        }
-        
-        .menu-section {
-            margin: 30px 0;
-        }
-        
-        .section-title {
-            font-size: 1.4em;
-            color: #6b8e5f;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #6b8e5f;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        
-        .menu-item {
-            display: flex;
-            align-items: flex-start;
-            padding: 15px;
-            margin: 10px 0;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .menu-item:hover {
-            border-color: #8db380;
-            background: #f4f7f2;
-        }
-        
-        .menu-item.selected {
-            border-color: #8db380;
-            background: #e8f0e3;
-        }
-        
-        .menu-item.disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-        }
-        
-        .menu-item.disabled:hover {
-            border-color: #e0e0e0;
-            background: white;
-        }
-        
-        .menu-item input[type="checkbox"] {
-            margin-right: 15px;
-            width: 20px;
-            height: 20px;
-            cursor: pointer;
-            flex-shrink: 0;
-            margin-top: 2px;
-        }
-        
-        .item-details {
-            flex: 1;
-        }
-        
-        .item-name {
-            font-weight: 600;
-            font-size: 1.1em;
-            color: #333;
-            margin-bottom: 5px;
-        }
-        
-        .item-description {
-            color: #666;
-            font-size: 0.95em;
-            line-height: 1.4;
-        }
-        
-        .dietary-tags {
-            display: inline-block;
-            background: #f0f0f0;
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-size: 0.85em;
-            margin-left: 8px;
-            color: #666;
-        }
-        
-        .cook-time {
-            display: inline-block;
-            background: #fff3cd;
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-size: 0.85em;
-            margin-left: 8px;
-            color: #856404;
-        }
-        
-        .submit-btn {
-            width: 100%;
-            padding: 18px;
-            background: linear-gradient(135deg, #6b8e5f 0%, #8db380 100%);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.2em;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            margin-top: 30px;
-        }
-        
-        .submit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(141, 179, 128, 0.4);
-        }
-        
-        .submit-btn:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-            transform: none;
-        }
-        
-        .success-message {
-            display: none;
-            text-align: center;
-            padding: 40px;
-        }
-        
-        .success-message.show {
-            display: block;
-        }
-        
-        .success-icon {
-            font-size: 4em;
-            color: #8db380;
-            margin-bottom: 20px;
-        }
-        
-        .warning {
-            background: #fff3cd;
-            border: 1px solid #ffc107;
-            padding: 12px;
-            border-radius: 6px;
-            margin: 20px 0;
-            color: #856404;
-        }
-        
-        .intro-text {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 6px;
-            margin-bottom: 30px;
-            color: #495057;
-            line-height: 1.6;
-        }
-        
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 1.8em;
-            }
-            
-            .form-content {
-                padding: 20px 15px;
-            }
-        }
+        body { margin: 0; padding: 0; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>IZANAMI DINNER</h1>
-            <p>Wednesday, November 12th</p>
-            <p>Select 5 À La Carte Menu Items</p>
-            <div class="selection-counter">
-                <span id="counter">0 of 5 items selected</span>
-            </div>
-        </div>
-        
-        <div class="form-content" id="formContent">
-            <div class="intro-text">
-                Please select exactly 5 items from any of the sections below for your dining experience. Your selections will help us prepare for an amazing evening of Japanese-inspired cuisine.
-            </div>
-            
-            <form id="menuForm">
-                <div class="form-group">
-                    <label for="name">Full Name *</label>
-                    <input type="text" id="name" name="name" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="email">Email Address *</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="dietary">Any dietary restrictions or allergies?</label>
-                    <input type="text" id="dietary" name="dietary" placeholder="Optional">
-                </div>
-                
-                <div class="warning">
-                    <strong>⚠️ Please select exactly 5 items from the menu below.</strong> You won't be able to submit until you've selected 5 items.
-                </div>
-                
-                <div class="menu-section">
-                    <div class="section-title">Cold Dishes</div>
-                    <div class="menu-item" data-item="spicy-cucumber-avocado">
-                        <input type="checkbox" name="menuItem" value="Spicy Cucumber + Avocado Salad">
-                        <div class="item-details">
-                            <div class="item-name">Spicy Cucumber + Avocado Salad <span class="dietary-tags">GF</span></div>
-                            <div class="item-description">Serrano pepper vinaigrette, marcona almonds, togarashi</div>
-                        </div>
-                    </div>
-                    
-                    <div class="menu-item" data-item="burrata">
-                        <input type="checkbox" name="menuItem" value="Burrata Salad">
-                        <div class="item-details">
-                            <div class="item-name">Burrata Salad <span class="dietary-tags">GF</span></div>
-                            <div class="item-description">Roasted organic autumn vegetables, toasted pistachio + shiso pesto, black garlic reduction</div>
-                        </div>
-                    </div>
-                    
-                    <div class="menu-item" data-item="apple-kimchi">
-                        <input type="checkbox" name="menuItem" value="Apple Kimchi Salad">
-                        <div class="item-details">
-                            <div class="item-name">Apple Kimchi Salad <span class="dietary-tags">GF</span></div>
-                            <div class="item-description">House made apple kimchi, crème fraiche, local organic arugula, candied pecans, crispy jamon serrano</div>
-                        </div>
-                    </div>
-                    
-                    <div class="menu-item" data-item="crispy-tuna">
-                        <input type="checkbox" name="menuItem" value="Crispy Spicy Tuna">
-                        <div class="item-details">
-                            <div class="item-name">Crispy Spicy Tuna</div>
-                            <div class="item-description">Crispy sushi rice cakes, spicy tuna, avocado, jalapeño, unagi sauce</div>
-                        </div>
-                    </div>
-                    
-                    <div class="menu-item" data-item="black-sesame">
-                        <input type="checkbox" name="menuItem" value="Black Sesame Noodles">
-                        <div class="item-details">
-                            <div class="item-name">Black Sesame Noodles</div>
-                            <div class="item-description">Burdock root, carrots, edamame, scallions, house made black sesame dressing</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="menu-section">
-                    <div class="section-title">Raw Bar</div>
-                    <div class="menu-item" data-item="sashimi-ceviche">
-                        <input type="checkbox" name="menuItem" value="Sashimi 'Ceviche'">
-                        <div class="item-details">
-                            <div class="item-name">Sashimi "Ceviche"</div>
-                            <div class="item-description">Ahi tuna, ceviche-inspired marinade, kizami wasabi, ginger shoyu sudachi sauce</div>
-                        </div>
-                    </div>
-                    
-                    <div class="menu-item" data-item="assorted-sashimi">
-                        <input type="checkbox" name="menuItem" value="Assorted Sashimi">
-                        <div class="item-details">
-                            <div class="item-name">Assorted Sashimi</div>
-                            <div class="item-description">Daikon radish, pickled ginger, smoked shoyu, freshly grated wasabi root</div>
-                        </div>
-                    </div>
-                    
-                    <div class="menu-item" data-item="temaki">
-                        <input type="checkbox" name="menuItem" value="Temaki Hand Rolls">
-                        <div class="item-details">
-                            <div class="item-name">Temaki Hand Rolls</div>
-                            <div class="item-description">Two handrolls, ask server for today's selection</div>
-                        </div>
-                    </div>
-                    
-                    <div class="menu-item" data-item="salmon-avocado">
-                        <input type="checkbox" name="menuItem" value="Salmon + Avocado Roll">
-                        <div class="item-details">
-                            <div class="item-name">Salmon + Avocado Roll</div>
-                        </div>
-                    </div>
-                    
-                    <div class="menu-item" data-item="tekka">
-                        <input type="checkbox" name="menuItem" value="Tekka Maki">
-                        <div class="item-details">
-                            <div class="item-name">Tekka Maki</div>
-                            <div class="item-description">Tuna + shiso</div>
-                        </div>
-                    </div>
-                    
-                    <div class="menu-item" data-item="kampyou">
-                        <input type="checkbox" name="menuItem" value="Kampyou">
-                        <div class="item-details">
-                            <div class="item-name">Kampyou</div>
-                            <div class="item-description">Sweet gourd + wasabi</div>
-                        </div>
-                    </div>
-                    
-                    <div class="menu-item" data-item="ume-shiso-shrimp">
-                        <input type="checkbox" name="menuItem" value="Ume + Shiso + Shrimp Roll">
-                        <div class="item-details">
-                            <div class="item-name">Ume + Shiso + Shrimp Roll</div>
-                        </div>
-                    </div>
-                    
-                    <div class="menu-item" data-item="kappa">
-                        <input type="checkbox" name="menuItem" value="Kappa Maki">
-                        <div class="item-details">
-                            <div class="item-name">Kappa Maki</div>
-                            <div class="item-description">Cucumber roll</div>
-                        </div>
-                    </div>
-                    
-                    <div class="menu-item" data-item="kani">
-                        <input type="checkbox" name="menuItem" value="Kani Avocado">
-                        <div class="item-details">
-                            <div class="item-name">Kani Avocado</div>
-                            <div class="item-description">Snow crab + avocado</div>
-                        </div>
-                    </div>
-                    
-                    <div class="menu-item" data-item="negi-hamachi">
-                        <input type="checkbox" name="menuItem" value="Negi Hamachi">
-                        <div class="item-details">
-                            <div class="item-name">Negi Hamachi</div>
-                            <div class="item-description">Yellow tail + scallions</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="menu-section">
-                    <div class="section-title">Hot Dishes</div>
-                    <div class="menu-item" data-item="pork-belly">
-                        <input type="checkbox" name="menuItem" value="Crispy Kurobuta Pork Belly">
-                        <div class="item-details">
-                            <div class="item-name">Crispy Kurobuta Pork Belly</div>
-                            <div class="item-description">Watermelon agridulce, pickled watermelon rind, scallions</div>
-                        </div>
-                    </div>
-                    
-                    <div class="menu-item" data-item="miso-bass">
-                        <input type="checkbox" name="menuItem" value="Grilled Miso Bass">
-                        <div class="item-details">
-                            <div class="item-name">Grilled Miso Bass <span class="dietary-tags">GF</span></div>
-                            <div class="item-description">Wild Chilean sea bass, miso, bok choy, pickled ginger</div>
-                        </div>
-                    </div>
-                    
-                    <div class="menu-item" data-item="gyoza">
-                        <input type="checkbox" name="menuItem" value="House-made Skillet Gyoza">
-                        <div class="item-details">
-                            <div class="item-name">House-made Skillet Gyoza <span class="cook-time">20 min cook time</span></div>
-                            <div class="item-description">Mary's organic chicken, shiso, scallions, garlic, wakame + dipping sauce</div>
-                        </div>
-                    </div>
-                    
-                    <div class="menu-item" data-item="wagyu-ribs">
-                        <input type="checkbox" name="menuItem" value="Wagyu Short Ribs">
-                        <div class="item-details">
-                            <div class="item-name">Wagyu Short Ribs</div>
-                            <div class="item-description">Ancho chile-shoyu braised, parsnip-pear puree, yuzu-shoyu brussels sprouts, vanilla pickled fennel</div>
-                        </div>
-                    </div>
-                    
-                    <div class="menu-item" data-item="seasonal-itame">
-                        <input type="checkbox" name="menuItem" value="Seasonal Itame">
-                        <div class="item-details">
-                            <div class="item-name">Seasonal Itame <span class="dietary-tags">GF</span></div>
-                            <div class="item-description">Japanese style seasonal vegetables stir fry</div>
-                        </div>
-                    </div>
-                    
-                    <div class="menu-item" data-item="mushrooms">
-                        <input type="checkbox" name="menuItem" value="Roasted Japanese Mushrooms">
-                        <div class="item-details">
-                            <div class="item-name">Roasted Japanese Mushrooms <span class="dietary-tags">GF</span></div>
-                            <div class="item-description">Bean sprouts, tamari, butter, yuzu, shoyu-pickled garlic</div>
-                        </div>
-                    </div>
-                    
-                    <div class="menu-item" data-item="nasu-dengaku">
-                        <input type="checkbox" name="menuItem" value="Nasu Dengaku">
-                        <div class="item-details">
-                            <div class="item-name">Nasu Dengaku <span class="dietary-tags">GF</span></div>
-                            <div class="item-description">Organic grilled Japanese eggplant, miso, goma seeds</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="menu-section">
-                    <div class="section-title">Grilled Items</div>
-                    <div class="menu-item" data-item="wagyu-ishiyaki">
-                        <input type="checkbox" name="menuItem" value="Wagyu Beef Ishiyaki">
-                        <div class="item-details">
-                            <div class="item-name">Wagyu Beef Ishiyaki</div>
-                            <div class="item-description">Premium beef, cook at table on 500° hot stone, smoked shoyu, sesame miso sauce</div>
-                        </div>
-                    </div>
-                    
-                    <div class="menu-item" data-item="tako">
-                        <input type="checkbox" name="menuItem" value="Tako Plate">
-                        <div class="item-details">
-                            <div class="item-name">Tako Plate</div>
-                            <div class="item-description">Grilled octopus, fingerling potatoes, gochujang aioli, onion escabeche</div>
-                        </div>
-                    </div>
-                    
-                    <div class="menu-item" data-item="pork-ribs">
-                        <input type="checkbox" name="menuItem" value="Smoked Pork Ribs">
-                        <div class="item-details">
-                            <div class="item-name">Smoked Pork Ribs</div>
-                            <div class="item-description">Sweet chile glaze, ginger cabbage slaw, parsley peanut mojo sauce</div>
-                        </div>
-                    </div>
-                    
-                    <div class="menu-item" data-item="grilled-avocado">
-                        <input type="checkbox" name="menuItem" value="Grilled Avocado">
-                        <div class="item-details">
-                            <div class="item-name">Grilled Avocado <span class="dietary-tags">GF</span></div>
-                            <div class="item-description">Tamari, lemon, sea salt, wasabi</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="menu-section">
-                    <div class="section-title">Fried Items</div>
-                    <div class="menu-item" data-item="karaage">
-                        <input type="checkbox" name="menuItem" value="Tori no Karaage">
-                        <div class="item-details">
-                            <div class="item-name">Tori no Karaage <span class="dietary-tags">GF</span></div>
-                            <div class="item-description">Mary's organic fried chicken, spicy mayo, lemon</div>
-                        </div>
-                    </div>
-                    
-                    <div class="menu-item" data-item="kaki-fry">
-                        <input type="checkbox" name="menuItem" value="Kaki Fry">
-                        <div class="item-details">
-                            <div class="item-name">Kaki Fry <span class="dietary-tags">GF</span></div>
-                            <div class="item-description">Fried oysters, spicy sesame sriracha sauce, yuzu aioli, shiso-pickled red onions</div>
-                        </div>
-                    </div>
-                    
-                    <div class="menu-item" data-item="cauliflower">
-                        <input type="checkbox" name="menuItem" value="Tempura Cauliflower">
-                        <div class="item-details">
-                            <div class="item-name">Tempura Cauliflower</div>
-                            <div class="item-description">Miso chile sesame sauce, pine nuts, furikake</div>
-                        </div>
-                    </div>
-                    
-                    <div class="menu-item" data-item="renkon">
-                        <input type="checkbox" name="menuItem" value="Renkon Hasami Age">
-                        <div class="item-details">
-                            <div class="item-name">Renkon Hasami Age <span class="dietary-tags">GF</span></div>
-                            <div class="item-description">Lotus root, chicken, garlic shoyu chili sauce</div>
-                        </div>
-                    </div>
-                    
-                    <div class="menu-item" data-item="beet-croquettes">
-                        <input type="checkbox" name="menuItem" value="Roasted Beet & Shiso Croquettes">
-                        <div class="item-details">
-                            <div class="item-name">Roasted Beet & Shiso Croquettes</div>
-                            <div class="item-description">House made curry aioli</div>
-                        </div>
-                    </div>
-                    
-                    <div class="menu-item" data-item="brussels">
-                        <input type="checkbox" name="menuItem" value="Brussels Sprouts">
-                        <div class="item-details">
-                            <div class="item-name">Brussels Sprouts <span class="dietary-tags">GF</span></div>
-                            <div class="item-description">Crispy pork belly, jalapeños, parmesan, candied pecans</div>
-                        </div>
-                    </div>
-                    
-                    <div class="menu-item" data-item="ebi-tempura">
-                        <input type="checkbox" name="menuItem" value="Ebi Tempura">
-                        <div class="item-details">
-                            <div class="item-name">Ebi Tempura</div>
-                            <div class="item-description">Shrimp tempura + aji amarillo pineapple sweet chile</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="menu-section">
-                    <div class="section-title">Desserts</div>
-                    <div class="menu-item" data-item="hojicha">
-                        <input type="checkbox" name="menuItem" value="Hojicha Panna Cotta">
-                        <div class="item-details">
-                            <div class="item-name">Hojicha Panna Cotta <span class="dietary-tags">GF</span></div>
-                            <div class="item-description">Japanese roasted green tea custard, almond shortbread, black fig compote</div>
-                        </div>
-                    </div>
-                    
-                    <div class="menu-item" data-item="yuzu-cheesecake">
-                        <input type="checkbox" name="menuItem" value="Yuzu Ricotta Cheesecake">
-                        <div class="item-details">
-                            <div class="item-name">Yuzu Ricotta Cheesecake <span class="dietary-tags">GF</span></div>
-                            <div class="item-description">Almond crust, strawberry-yuzu compote, berry paper</div>
-                        </div>
-                    </div>
-                    
-                    <div class="menu-item" data-item="pear-tart">
-                        <input type="checkbox" name="menuItem" value="Autumn Pear Tart">
-                        <div class="item-details">
-                            <div class="item-name">Autumn Pear Tart <span class="dietary-tags">GF</span></div>
-                            <div class="item-description">Miso caramel caramelized pears, pastry cream, butter milk ice cream</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="comments">Any special requests, additional dietary needs, or comments for the chef?</label>
-                    <textarea id="comments" name="comments" placeholder="Optional"></textarea>
-                </div>
-                
-                <button type="submit" class="submit-btn" id="submitBtn" disabled>Submit My Selections</button>
-            </form>
-        </div>
-        
-        <div class="success-message" id="successMessage">
-            <div class="success-icon">✓</div>
-            <h2>Thank you for your selections!</h2>
-            <p style="margin-top: 15px; color: #666;">Your menu choices have been recorded. We look forward to serving you!</p>
-        </div>
-    </div>
+    <div id="app"></div>
     
-    <script>
-        const form = document.getElementById('menuForm');
-        const checkboxes = document.querySelectorAll('input[name="menuItem"]');
-        const counter = document.getElementById('counter');
-        const submitBtn = document.getElementById('submitBtn');
-        const menuItems = document.querySelectorAll('.menu-item');
-        const formContent = document.getElementById('formContent');
-        const successMessage = document.getElementById('successMessage');
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <script type="text/babel">
+        const { useState } = React;
         
-        let selections = [];
+        const AlertCircle = ({ className }) => (
+            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+        );
         
-        function updateCounter() {
-            // Count actually checked checkboxes
-            const checked = document.querySelectorAll('input[name="menuItem"]:checked').length;
-            counter.textContent = `${checked} of 5 items selected`;
-            
-            submitBtn.disabled = checked !== 5;
-            
-            checkboxes.forEach((cb, index) => {
-                const item = menuItems[index];
-                if (!cb.checked && checked >= 5) {
-                    cb.disabled = true;
-                    item.classList.add('disabled');
-                } else {
-                    cb.disabled = false;
-                    item.classList.remove('disabled');
-                }
-            });
-        }
-        
-        checkboxes.forEach((checkbox, index) => {
-            const item = menuItems[index];
-            
-            checkbox.addEventListener('change', function() {
-                if (this.checked) {
-                    selections.push(this.value);
-                    item.classList.add('selected');
-                } else {
-                    selections = selections.filter(s => s !== this.value);
-                    item.classList.remove('selected');
-                }
-                updateCounter();
+        const CheckCircle2 = ({ className }) => (
+            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="m9 12 2 2 4-4"></path>
+            </svg>
+        );
+
+        const IzanamiOrderForm = () => {
+            const [formData, setFormData] = useState({
+                name: '',
+                email: '',
+                dietary: '',
+                selections: [],
+                comments: ''
             });
             
-            item.addEventListener('click', function(e) {
-                if (e.target.type !== 'checkbox' && !checkbox.disabled) {
-                    checkbox.checked = !checkbox.checked;
-                    checkbox.dispatchEvent(new Event('change'));
+            const [submitted, setSubmitted] = useState(false);
+
+            const menuItems = {
+                cold: [
+                    { id: 'cold1', name: 'Spicy Cucumber + Avocado Salad', desc: 'serrano pepper vinaigrette, marcona almonds, togarashi', gf: true },
+                    { id: 'cold2', name: 'Burrata Salad', desc: 'roasted organic autumn vegetables, toasted pistachio + shiso pesto, black garlic reduction', gf: true },
+                    { id: 'cold3', name: 'Apple Kimchi Salad', desc: 'house made apple kimchi, crème fraiche, local organic arugula, candied pecans, crispy jamon serrano', gf: true },
+                    { id: 'cold4', name: 'Crispy Spicy Tuna', desc: 'crispy sushi rice cakes, spicy tuna, avocado, jalapeño, unagi sauce', gf: false },
+                    { id: 'cold5', name: 'Black Sesame Noodles', desc: 'burdock root, carrots, edamame, scallions, house made black sesame dressing', gf: false }
+                ],
+                raw: [
+                    { id: 'raw1', name: 'Sashimi "Ceviche"', desc: 'ahi tuna, ceviche-inspired marinade, kizami wasabi, ginger shoyu sudachi sauce', gf: false },
+                    { id: 'raw2', name: 'Assorted Sashimi', desc: 'daikon radish, pickled ginger, smoked shoyu, freshly grated wasabi root', gf: false },
+                    { id: 'raw3', name: 'Temaki Hand Rolls', desc: 'two handrolls, ask server for selection', gf: false },
+                    { id: 'raw4', name: 'Salmon + Avocado Roll', desc: '', gf: false },
+                    { id: 'raw5', name: 'Tekka Maki', desc: 'tuna + shiso', gf: false },
+                    { id: 'raw6', name: 'Kampyou', desc: 'sweet gourd + wasabi', gf: false },
+                    { id: 'raw7', name: 'Ume + Shiso + Shrimp Roll', desc: '', gf: false },
+                    { id: 'raw8', name: 'Kappa Maki', desc: 'cucumber roll', gf: false },
+                    { id: 'raw9', name: 'Kani Avocado', desc: 'snow crab + avocado', gf: false },
+                    { id: 'raw10', name: 'Negi Hamachi', desc: 'yellow tail + scallions', gf: false }
+                ],
+                hot: [
+                    { id: 'hot1', name: 'Crispy Kurobuta Pork Belly', desc: 'watermelon agridulce, pickled watermelon rind, scallions', gf: false },
+                    { id: 'hot2', name: 'Grilled Miso Bass', desc: 'wild chilean sea bass, miso, bok choy, pickled ginger', gf: true },
+                    { id: 'hot3', name: 'House-made Skillet Gyoza', desc: 'organic chicken, shiso, scallions, garlic, wakame + dipping sauce (20 min cook time)', gf: false },
+                    { id: 'hot4', name: 'Wagyu Short Ribs', desc: 'ancho chile-shoyu braised, parsnip-pear puree, yuzu-shoyu brussels sprouts, vanilla pickled fennel', gf: false },
+                    { id: 'hot5', name: 'Seasonal Itame', desc: 'japanese style seasonal vegetables stir fry', gf: true },
+                    { id: 'hot6', name: 'Roasted Japanese Mushrooms', desc: 'bean sprouts, tamari, butter, yuzu, shoyu-pickled garlic', gf: true },
+                    { id: 'hot7', name: 'Nasu Dengaku', desc: 'organic grilled japanese eggplant, miso, goma seeds', gf: true }
+                ],
+                grilled: [
+                    { id: 'grilled1', name: 'Wagyu Beef Ishiyaki', desc: 'premium beef, cook at table on 500° hot stone, smoked shoyu, sesame miso sauce', gf: false },
+                    { id: 'grilled2', name: 'Tako Plate', desc: 'grilled octopus, fingerling potatoes, gochujang aioli, onion escabeche', gf: false },
+                    { id: 'grilled3', name: 'Smoked Pork Ribs', desc: 'sweet chile glaze, ginger cabbage slaw, parsley peanut mojo sauce', gf: false },
+                    { id: 'grilled4', name: 'Grilled Avocado', desc: 'tamari, lemon, sea salt, wasabi', gf: true }
+                ],
+                fried: [
+                    { id: 'fried1', name: 'Tori no Karaage', desc: 'organic fried chicken, spicy mayo, lemon', gf: true },
+                    { id: 'fried2', name: 'Kaki Fry', desc: 'fried oysters, spicy sesame sriracha sauce, yuzu aioli, shiso-pickled red onions', gf: true },
+                    { id: 'fried3', name: 'Tempura Cauliflower', desc: 'miso chile sesame sauce, pine nuts, furikake', gf: false },
+                    { id: 'fried4', name: 'Renkon Hasami Age', desc: 'lotus root, chicken, garlic shoyu chili sauce', gf: true },
+                    { id: 'fried5', name: 'Roasted Beet & Shiso Croquettes', desc: 'house made curry aioli', gf: false },
+                    { id: 'fried6', name: 'Brussels Sprouts', desc: 'crispy pork belly, jalapeños, parmesan, candied pecans', gf: true },
+                    { id: 'fried7', name: 'Ebi Tempura', desc: 'shrimp tempura + aji amarillo pineapple sweet chile', gf: false }
+                ],
+                desserts: [
+                    { id: 'dessert1', name: 'Hojicha Panna Cotta', desc: 'japanese roasted green tea custard, almond shortbread, black fig compote', gf: true },
+                    { id: 'dessert2', name: 'Yuzu Ricotta Cheesecake', desc: 'almond crust, strawberry-yuzu compote, berry paper', gf: true },
+                    { id: 'dessert3', name: 'Autumn Pear Tart', desc: 'miso caramel caramelized pears, pastry cream, butter milk ice cream', gf: true }
+                ]
+            };
+
+            const handleCheckboxChange = (itemId) => {
+                setFormData(prev => {
+                    const newSelections = prev.selections.includes(itemId)
+                        ? prev.selections.filter(id => id !== itemId)
+                        : prev.selections.length < 5
+                        ? [...prev.selections, itemId]
+                        : prev.selections;
+                    
+                    return { ...prev, selections: newSelections };
+                });
+            };
+
+            const getItemName = (itemId) => {
+                for (const category of Object.values(menuItems)) {
+                    const item = category.find(i => i.id === itemId);
+                    if (item) return item.name;
                 }
-            });
-        });
-        
-        form.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const dietary = document.getElementById('dietary').value;
-            const comments = document.getElementById('comments').value;
-            
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Submitting...';
-            
-            const formData = new FormData();
-            formData.append('name', name);
-            formData.append('email', email);
-            formData.append('dietary_restrictions', dietary);
-            // Get current selections from checked checkboxes
-            const currentSelections = Array.from(document.querySelectorAll('input[name
+                return itemId;
+            };
+
+            const handleSubmit = () => {
+                if (formData.selections.length !== 5) {
+                    alert('Please select exactly 5 items');
+                    return;
+                }
+                if (!formData.name || !formData.email) {
+                    alert('Please fill in your name and email');
+                    return;
+                }
+                setSubmitted(true);
+            };
+
+            const selectionCount = formData.selections.length;
+            const remaining = 5 - selectionCount;
+
+            if (submitted) {
+                return (
+                    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-8 flex items-center justify-center">
+                        <div className="max-w-2xl w-full bg-white rounded-lg shadow-2xl p-12 text-center">
+                            <CheckCircle2 className="w-20 h-20 text-green-500 mx-auto mb-6" />
+                            <h2 className="text-3xl font-bold text-gray-800 mb-4">Order Submitted!</h2>
+                            <p className="text-gray-600 mb-6">Thank you, {formData.name}. Your selections have been received.</p>
+                            <div className="bg-gray-50 rounded-lg p-6 mb-6">
+                                <h3 className="font-semibold text-gray-800 mb-3">Your Selections:</h3>
+                                <ol className="text-left space-y-2">
+                                    {formData.selections.map((id, idx) => (
+                                        <li key={id} className="text-gray-700">
+                                            {idx + 1}. {getItemName(id)}
+                                        </li>
+                                    ))}
+                                </ol>
+                            </div>
+                            <p className="text-sm text-gray-500">A confirmation has been sent to {formData.email}</p>
+                        </div>
+                    </div>
+                );
+            }
+
+            return (
+                <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-4 md:p-8">
+                    <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-2xl overflow-hidden">
+                        <div className="p-8 text-white text-center" style={{backgroundColor: '#aace98'}}>
+                            <h1 className="text-4xl font-bold mb-2">IZANAMI DINNER</h1>
+                            <p className="text-emerald-50 text-xl mb-3">Wednesday, November 12th</p>
+                            <p className="text-emerald-50 text-lg mb-4">Select 5 À La Carte Menu Items</p>
+                            <p className="text-sm text-emerald-50 max-w-2xl mx-auto leading-relaxed">Please select exactly 5 items from any of the sections below for your dining experience. Your selections will help us prepare for an amazing evening of Japanese-inspired cuisine.</p>
+                        </div>
+
+                        <div className="sticky top-0 bg-white border-b-2 border-gray-200 p-4 shadow-md z-10">
+                            <div className="flex items-center justify-between max-w-4xl mx-auto">
+                                <div className="flex items-center gap-2">
+                                    {remaining > 0 ? (
+                                        <AlertCircle className="w-5 h-5 text-amber-500" />
+                                    ) : (
+                                        <CheckCircle2 className="w-5 h-5 text-green-500" />
+                                    )}
+                                    <span className="font-semibold text-lg">
+                                        {selectionCount} / 5 items selected
+                                    </span>
+                                </div>
+                                <span className={`text-sm font-medium ${remaining === 0 ? 'text-green-600' : 'text-gray-600'}`}>
+                                    {remaining > 0 ? `${remaining} remaining` : 'All items selected!'}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div className="p-8">
+                            <div className="mb-8 space-y-4">
+                                <h2 className="text-2xl font-bold text-gray-800 mb-4">Guest Information</h2>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Full Name *</label>
+                                    <input
+                                        type="text"
+                                        value={formData.name}
+                                        onChange={(e) => setFormData({...formData, name: e.target.value})}
+                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-400 focus:border-transparent"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Email Address *</label>
+                                    <input
+                                        type="email"
+                                        value={formData.email}
+                                        onChange={(e) => setFormData({...formData, email: e.target.value})}
+                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-400 focus:border-transparent"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Dietary Restrictions or Allergies</label>
+                                    <input
+                                        type="text"
+                                        value={formData.dietary}
+                                        onChange={(e) => setFormData({...formData, dietary: e.target.value})}
+                                        placeholder="Please list any dietary restrictions or allergies"
+                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-400 focus:border-transparent"
+                                    />
+                                </div>
+                            </div>
+
+                            {Object.entries(menuItems).map(([category, items]) => (
+                                <div key={category} className="mb-8">
+                                    <h2 className="text-2xl font-bold mb-4 capitalize border-b-2 pb-2" style={{color: '#44624a', borderColor: '#44624a'}}>
+                                        {category === 'raw' ? 'Raw Bar' : category === 'hot' ? 'Hot Dishes' : category === 'grilled' ? 'Grilled Items' : category === 'fried' ? 'Fried Items' : category}
+                                    </h2>
+                                    <div className="space-y-3">
+                                        {items.map(item => (
+                                            <label
+                                                key={item.id}
+                                                className={`flex items-start p-4 border-2 rounded-lg cursor-pointer transition-all ${
+                                                    formData.selections.includes(item.id)
+                                                        ? 'bg-opacity-20'
+                                                        : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                                                } ${selectionCount >= 5 && !formData.selections.includes(item.id) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                                style={formData.selections.includes(item.id) ? {
+                                                    borderColor: '#aace98',
+                                                    backgroundColor: '#aace9833'
+                                                } : {}}
+                                            >
+                                                <input
+                                                    type="checkbox"
+                                                    checked={formData.selections.includes(item.id)}
+                                                    onChange={() => handleCheckboxChange(item.id)}
+                                                    disabled={selectionCount >= 5 && !formData.selections.includes(item.id)}
+                                                    className="mt-1 h-5 w-5 text-teal-500 rounded focus:ring-teal-400"
+                                                />
+                                                <div className="ml-3 flex-1">
+                                                    <div className="flex items-center gap-2">
+                                                        <span className="font-semibold text-gray-900">{item.name}</span>
+                                                        {item.gf && (
+                                                            <span className="text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded">GF</span>
+                                                        )}
+                                                    </div>
+                                                    {item.desc && (
+                                                        <p className="text-sm text-gray-600 mt-1">{item.desc}</p>
+                                                    )}
+                                                </div>
+                                            </label>
+                                        ))}
+                                    </div>
+                                </div>
+                            ))}
+
+                            <div className="mb-8">
+                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                    Additional Comments or Special Requests
+                                </label>
+                                <textarea
+                                    value={formData.comments}
+                                    onChange={(e) => setFormData({...formData, comments: e.target.value})}
+                                    rows="4"
+                                    placeholder="Any special requests or additional dietary needs?"
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-400 focus:border-transparent"
+                                />
+                            </div>
+
+                            <button
+                                type="button"
+                                onClick={handleSubmit}
+                                disabled={selectionCount !== 5}
+                                className={`w-full py-4 px-6 rounded-lg font-semibold text-lg transition-all ${
+                                    selectionCount === 5
+                                        ? 'bg-gradient-to-r from-emerald-600 to-teal-500 text-white hover:from-emerald-500 hover:to-teal-400 shadow-lg hover:shadow-xl'
+                                        : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                }`}
+                            >
+                                {selectionCount === 5 ? 'Submit Order' : `Select ${remaining} more item${remaining !== 1 ? 's' : ''} to submit`}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        ReactDOM.render(<IzanamiOrderForm />, document.getElementById('app'));
+    </script>
+</body>
+</html>
