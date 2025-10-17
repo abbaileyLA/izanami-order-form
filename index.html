@@ -44,6 +44,7 @@
             });
             
             const [submitted, setSubmitted] = useState(false);
+            const [submitting, setSubmitting] = useState(false);
 
             const menuItems = {
                 cold: [
@@ -116,7 +117,7 @@
                 return itemId;
             };
 
-            const handleSubmit = () => {
+            const handleSubmit = async () => {
                 if (formData.selections.length !== 5) {
                     alert('Please select exactly 5 items');
                     return;
@@ -125,7 +126,42 @@
                     alert('Please fill in your name and email');
                     return;
                 }
-                setSubmitted(true);
+
+                setSubmitting(true);
+
+                try {
+                    const selectedItemNames = formData.selections.map(id => getItemName(id));
+                    
+                    const response = await fetch('https://formspree.io/f/mnngllar', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            name: formData.name,
+                            email: formData.email,
+                            dietary_restrictions: formData.dietary,
+                            menu_selections: selectedItemNames.join(', '),
+                            selection_1: selectedItemNames[0] || '',
+                            selection_2: selectedItemNames[1] || '',
+                            selection_3: selectedItemNames[2] || '',
+                            selection_4: selectedItemNames[3] || '',
+                            selection_5: selectedItemNames[4] || '',
+                            additional_comments: formData.comments
+                        })
+                    });
+
+                    if (response.ok) {
+                        setSubmitted(true);
+                    } else {
+                        alert('There was an error submitting your order. Please try again.');
+                    }
+                } catch (error) {
+                    alert('There was an error submitting your order. Please try again.');
+                    console.error('Error:', error);
+                } finally {
+                    setSubmitting(false);
+                }
             };
 
             const selectionCount = formData.selections.length;
@@ -274,14 +310,14 @@
                             <button
                                 type="button"
                                 onClick={handleSubmit}
-                                disabled={selectionCount !== 5}
+                                disabled={selectionCount !== 5 || submitting}
                                 className={`w-full py-4 px-6 rounded-lg font-semibold text-lg transition-all ${
-                                    selectionCount === 5
+                                    selectionCount === 5 && !submitting
                                         ? 'bg-gradient-to-r from-emerald-600 to-teal-500 text-white hover:from-emerald-500 hover:to-teal-400 shadow-lg hover:shadow-xl'
                                         : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                                 }`}
                             >
-                                {selectionCount === 5 ? 'Submit Order' : `Select ${remaining} more item${remaining !== 1 ? 's' : ''} to submit`}
+                                {submitting ? 'Submitting...' : selectionCount === 5 ? 'Submit Order' : `Select ${remaining} more item${remaining !== 1 ? 's' : ''} to submit`}
                             </button>
                         </div>
                     </div>
